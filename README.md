@@ -1,4 +1,4 @@
-# go-and-windows-programming
+# Go Windows Programming
 
 Windows Programming in Go tutorial.
 
