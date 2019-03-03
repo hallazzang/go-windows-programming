@@ -26,7 +26,7 @@ func init() {
 
 func messageBox(hWnd uintptr, lpText *uint16, lpCaption *uint16, uType uint32) int32 {
 	var r1 uintptr
-	r1, _, lastError = procMessageBoxW.Call(uintptr(hWnd), uintptr(unsafe.Pointer(lpText)), uintptr(unsafe.Pointer(lpCaption)), uintptr(uType))
+	r1, _, lastError = procMessageBoxW.Call(hWnd, uintptr(unsafe.Pointer(lpText)), uintptr(unsafe.Pointer(lpCaption)), uintptr(uType))
 	return int32(r1)
 }
 
