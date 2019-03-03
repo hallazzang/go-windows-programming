@@ -12,9 +12,12 @@ var (
 	libwtsapi32 = windows.NewLazySystemDLL("wtsapi32.dll")
 
 	procCreateWindowExW        = libuser32.NewProc("CreateWindowExW")
+	procDefWindowProcW         = libuser32.NewProc("DefWindowProcW")
 	procDispatchMessageW       = libuser32.NewProc("DispatchMessageW")
 	procGetMessageW            = libuser32.NewProc("GetMessageW")
 	procGetModuleHandleW       = libkernel32.NewProc("GetModuleHandleW")
+	procLoadCursorW            = libuser32.NewProc("LoadCursorW")
+	procLoadIconW              = libuser32.NewProc("LoadIconW")
 	procRegisterClassExW       = libuser32.NewProc("RegisterClassExW")
 	procShowWindow             = libuser32.NewProc("ShowWindow")
 	procTranslateMessage       = libuser32.NewProc("TranslateMessage")
@@ -56,6 +59,12 @@ func CreateWindowEx(
 	return r1
 }
 
+func DefWindowProc(hWnd uintptr, Msg uint32, wParam, lParam uintptr) uintptr {
+	var r1 uintptr
+	r1, _, _ = procDefWindowProcW.Call(hWnd, uintptr(Msg), wParam, lParam)
+	return r1
+}
+
 func DispatchMessage(lpMsg *MSG) uintptr {
 	var r1 uintptr
 	r1, _, _ = procDispatchMessageW.Call(uintptr(unsafe.Pointer(lpMsg)))
@@ -75,6 +84,18 @@ func GetMessage(lpMsg *MSG, hWnd uintptr, uMsgFilterMin, uMsgFilterMax uint32) i
 func GetModuleHandle(lpModuleName *uint16) uintptr {
 	var r1 uintptr
 	r1, _, lastError = procGetModuleHandleW.Call(uintptr(unsafe.Pointer(lpModuleName)))
+	return r1
+}
+
+func LoadCursor(hInstance uintptr, lpCursorName *uint16) uintptr {
+	var r1 uintptr
+	r1, _, lastError = procLoadCursorW.Call(hInstance, uintptr(unsafe.Pointer(lpCursorName)))
+	return r1
+}
+
+func LoadIcon(hInstance uintptr, lpIconName *uint16) uintptr {
+	var r1 uintptr
+	r1, _, lastError = procLoadIconW.Call(hInstance, uintptr(unsafe.Pointer(lpIconName)))
 	return r1
 }
 
