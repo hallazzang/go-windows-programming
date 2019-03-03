@@ -8,13 +8,23 @@ import (
 )
 
 func wndProc(hWnd uintptr, msg uint32, wParam, lParam uintptr) uintptr {
-	return win.DefWindowProc(hWnd, msg, wParam, lParam)
+	switch msg {
+	case win.WM_DESTROY:
+		win.PostQuitMessage(0)
+	default:
+		return win.DefWindowProc(hWnd, msg, wParam, lParam)
+	}
+	return 0
 }
 
 func main() {
 	hInstance := win.GetModuleHandle(nil)
 
 	windowClass, err := windows.UTF16PtrFromString("MyWindow")
+	if err != nil {
+		panic(err)
+	}
+	title, err := windows.UTF16PtrFromString("Go Windows Programming")
 	if err != nil {
 		panic(err)
 	}
@@ -32,8 +42,33 @@ func main() {
 	wcex.LpszMenuName = nil
 	wcex.LpszClassName = windowClass
 	wcex.HIconSm = win.LoadIcon(hInstance, win.MAKEINTRESOURCE(win.IDI_APPLICATION))
-
 	if win.RegisterClassEx(&wcex) == 0 {
 		panic(win.GetLastError())
+	}
+
+	hWnd := win.CreateWindowEx(
+		0,
+		windowClass,
+		title,
+		win.WS_OVERLAPPEDWINDOW,
+		win.CW_USEDEFAULT,
+		win.CW_USEDEFAULT,
+		500,
+		100,
+		0,
+		0,
+		hInstance,
+		nil)
+	if hWnd == 0 {
+		panic(win.GetLastError())
+	}
+
+	win.ShowWindow(hWnd, win.SW_SHOWNORMAL)
+	win.UpdateWindow(hWnd)
+
+	var msg win.MSG
+	for win.GetMessage(&msg, 0, 0, 0) != 0 {
+		win.TranslateMessage(&msg)
+		win.DispatchMessage(&msg)
 	}
 }
