@@ -28,6 +28,6 @@ func WTSEnumerateProcesses(hServer uintptr, Reserved, Version uint32, ppProcessI
 	return int32(r1)
 }
 
-func WTSFreeMemory(pMemory uintptr) {
-	procWTSFreeMemory.Call(pMemory)
+func WTSFreeMemory(pMemory unsafe.Pointer) {
+	procWTSFreeMemory.Call(uintptr(pMemory))
 }
