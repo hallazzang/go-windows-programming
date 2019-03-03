@@ -7,22 +7,12 @@ import (
 )
 
 var (
-	libuser32   *windows.LazyDLL
-	libkernel32 *windows.LazyDLL
+	libuser32 = windows.NewLazySystemDLL("user32.dll")
 
-	procMessageBoxW  *windows.LazyProc
-	procGetLastError *windows.LazyProc
+	procMessageBoxW = libuser32.NewProc("MessageBoxW")
 
 	lastError error
 )
-
-func init() {
-	libuser32 = windows.NewLazySystemDLL("user32.dll")
-	libkernel32 = windows.NewLazySystemDLL("kernel32.dll")
-
-	procMessageBoxW = libuser32.NewProc("MessageBoxW")
-	procGetLastError = libkernel32.NewProc("GetLastError")
-}
 
 func messageBox(hWnd uintptr, lpText *uint16, lpCaption *uint16, uType uint32) int32 {
 	var r1 uintptr
