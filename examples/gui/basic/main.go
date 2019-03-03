@@ -1,5 +1,7 @@
 package main
 
+// https://docs.microsoft.com/en-us/cpp/windows/walkthrough-creating-windows-desktop-applications-cpp?view=vs-2017
+
 import (
 	"unsafe"
 
