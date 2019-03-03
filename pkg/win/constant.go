@@ -33,6 +33,11 @@ const (
 	SW_SHOWNORMAL  = 1
 )
 
+// Window messages
+const (
+	WM_DESTROY = 0x0002
+)
+
 // Window styles
 const (
 	WS_CAPTION          = 0x00c00000

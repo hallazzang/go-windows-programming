@@ -18,6 +18,7 @@ var (
 	procGetModuleHandleW       = libkernel32.NewProc("GetModuleHandleW")
 	procLoadCursorW            = libuser32.NewProc("LoadCursorW")
 	procLoadIconW              = libuser32.NewProc("LoadIconW")
+	procPostQuitMessage        = libuser32.NewProc("PostQuitMessage")
 	procRegisterClassExW       = libuser32.NewProc("RegisterClassExW")
 	procShowWindow             = libuser32.NewProc("ShowWindow")
 	procTranslateMessage       = libuser32.NewProc("TranslateMessage")
@@ -97,6 +98,10 @@ func LoadIcon(hInstance uintptr, lpIconName *uint16) uintptr {
 	var r1 uintptr
 	r1, _, lastError = procLoadIconW.Call(hInstance, uintptr(unsafe.Pointer(lpIconName)))
 	return r1
+}
+
+func PostQuitMessage(nExitCode int32) {
+	procPostQuitMessage.Call(uintptr(nExitCode))
 }
 
 func RegisterClassEx(Arg1 *WNDCLASSEX) uint16 {
