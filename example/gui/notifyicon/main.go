@@ -35,6 +35,7 @@ func createMainWindow() (uintptr, error) {
 	wcex.Style = win.CS_HREDRAW | win.CS_VREDRAW
 	wcex.LpfnWndProc = windows.NewCallback(wndProc)
 	wcex.HInstance = hInstance
+	wcex.HCursor = win.LoadCursor(0, win.MAKEINTRESOURCE(win.IDC_ARROW))
 	wcex.HbrBackground = win.COLOR_WINDOW + 1
 	wcex.LpszClassName = wndClass
 	if win.RegisterClassEx(&wcex) == 0 {
@@ -50,13 +51,26 @@ func createMainWindow() (uintptr, error) {
 	return hwnd, nil
 }
 
-func loadIcon(name string) (uintptr, error) {
-	pname, err := windows.UTF16PtrFromString(name)
-	if err != nil {
-		return 0, err
+func loadIconFromResource(id uintptr) (uintptr, error) {
+	hIcon := win.LoadImage(
+		win.GetModuleHandle(nil),
+		win.MAKEINTRESOURCE(id),
+		win.IMAGE_ICON,
+		0, 0,
+		win.LR_DEFAULTSIZE)
+	if hIcon == win.NULL {
+		return 0, win.GetLastError()
 	}
 
-	hIcon := win.LoadImage(win.NULL, pname, win.IMAGE_ICON, 0, 0, win.LR_DEFAULTSIZE|win.LR_LOADFROMFILE)
+	return hIcon, nil
+}
+func loadIconFromFile(name string) (uintptr, error) {
+	hIcon := win.LoadImage(
+		win.NULL,
+		windows.StringToUTF16Ptr(name),
+		win.IMAGE_ICON,
+		0, 0,
+		win.LR_DEFAULTSIZE|win.LR_LOADFROMFILE)
 	if hIcon == win.NULL {
 		return 0, win.GetLastError()
 	}
@@ -69,16 +83,19 @@ func clickHandler() {
 }
 
 func main() {
+	hIcon, err := loadIconFromResource(10) // rsrc uses 10 for icon resource id
+	if err != nil {
+		hIcon, err = loadIconFromFile("icon.ico") // fallback to use file
+		if err != nil {
+			panic(err)
+		}
+	}
+	defer win.DestroyIcon(hIcon)
+
 	hwnd, err := createMainWindow()
 	if err != nil {
 		panic(err)
 	}
-
-	hIcon, err := loadIcon("icon.ico")
-	defer win.DestroyIcon(hIcon)
-
-	win.SendMessage(hwnd, win.WM_SETICON, win.ICON_BIG, hIcon)
-	win.SendMessage(hwnd, win.WM_SETICON, win.ICON_SMALL, hIcon)
 
 	ni, err := newNotifyIcon(hwnd)
 	if err != nil {
@@ -88,7 +105,7 @@ func main() {
 
 	ni.SetIcon(hIcon)
 	ni.SetTooltip("NotifyIcon Example")
-	ni.ShowNotification("Hello", "NotifyIcon!")
+	ni.ShowNotificationWithIcon("Hello", "NotifyIcon!", hIcon)
 
 	var msg win.MSG
 	for win.GetMessage(&msg, 0, 0, 0) != 0 {
