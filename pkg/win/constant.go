@@ -1,5 +1,12 @@
 package win
 
+const (
+	NULL = 0
+
+	TRUE  = BOOL(1)
+	FALSE = BOOL(0)
+)
+
 // GetSysColor constants
 const (
 	COLOR_WINDOW = 5
@@ -15,6 +22,12 @@ const (
 	CW_USEDEFAULT = ^0x7fffffff
 )
 
+// WM_SETICON constants
+const (
+	ICON_BIG   = 1
+	ICON_SMALL = 0
+)
+
 // LoadCursor constants
 const (
 	IDC_ARROW = 32512
@@ -23,6 +36,58 @@ const (
 // LoadIcon constants
 const (
 	IDI_APPLICATION = 32512
+)
+
+// LoadImage constants
+const (
+	IMAGE_BITMAP = 0
+	IMAGE_CURSOR = 2
+	IMAGE_ICON   = 1
+
+	LR_CREATEDIBSECTION = 0x00002000
+	LR_DEFAULTCOLOR     = 0x00000000
+	LR_DEFAULTSIZE      = 0x00000040
+	LR_LOADFROMFILE     = 0x00000010
+	LR_LOADMAP3DCOLORS  = 0x00001000
+	LR_LOADTRANSPARENT  = 0x00000020
+	LR_MONOCHROME       = 0x00000001
+	LR_SHARED           = 0x00008000
+	LR_VGACOLOR         = 0x00000080
+)
+
+// NotifyIcon constants
+const (
+	NIM_ADD        = 0x00000000
+	NIM_MODIFY     = 0x00000001
+	NIM_DELETE     = 0x00000002
+	NIM_SETFOCUS   = 0x00000003
+	NIM_SETVERSION = 0x00000004
+
+	NIF_MESSAGE  = 0x00000001
+	NIF_ICON     = 0x00000002
+	NIF_TIP      = 0x00000004
+	NIF_STATE    = 0x00000008
+	NIF_INFO     = 0x00000010
+	NIF_GUID     = 0x00000020
+	NIF_REALTIME = 0x00000040
+	NIF_SHOWTIP  = 0x00000080
+
+	NIS_HIDDEN     = 0x00000001
+	NIS_SHAREDICON = 0x00000002
+
+	NIIF_NONE               = 0x00000000
+	NIIF_INFO               = 0x00000001
+	NIIF_WARNING            = 0x00000002
+	NIIF_ERROR              = 0x00000003
+	NIIF_USER               = 0x00000004
+	NIIF_NOSOUND            = 0x00000010
+	NIIF_LARGE_ICON         = 0x00000020
+	NIIF_RESPECT_QUIET_TIME = 0x00000080
+	NIIF_ICON_MASK          = 0x0000000F
+
+	NIN_BALLOONSHOW      = 0x0402
+	NIN_BALLOONTIMEOUT   = 0x0404
+	NIN_BALLOONUSERCLICK = 0x0405
 )
 
 // ShowWindow constants
@@ -35,7 +100,16 @@ const (
 
 // Window messages
 const (
-	WM_DESTROY = 0x0002
+	WM_DESTROY       = 0x0002
+	WM_SETICON       = 0x0080
+	WM_MOUSEMOVE     = 0x0200
+	WM_LBUTTONDOWN   = 0x0201
+	WM_LBUTTONUP     = 0x0202
+	WM_LBUTTONDBLCLK = 0x0203
+	WM_RBUTTONDOWN   = 0x0204
+	WM_RBUTTONUP     = 0x0205
+	WM_RBUTTONDBLCLK = 0x0206
+	WM_APP           = 0x8000
 )
 
 // Window styles

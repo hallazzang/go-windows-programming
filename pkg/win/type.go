@@ -1,5 +1,14 @@
 package win
 
+type BOOL int32
+
+type GUID struct {
+	Data1 uint32
+	Data2 uint16
+	Data3 uint16
+	Data4 [8]byte
+}
+
 type MSG struct {
 	Hwnd     uintptr
 	Message  uint32
@@ -8,6 +17,24 @@ type MSG struct {
 	Time     uint32
 	Pt       POINT
 	LPrivate uint32
+}
+
+type NOTIFYICONDATA struct {
+	CbSize           uint32
+	HWnd             uintptr
+	UID              uint32
+	UFlags           uint32
+	UCallbackMessage uint32
+	HIcon            uintptr
+	SzTip            [128]uint16
+	DwState          uint32
+	DwStateMask      uint32
+	SzInfo           [256]uint16
+	UVersion         uint32
+	SzInfoTitle      [64]uint16
+	DwInfoFlags      uint32
+	GuidItem         GUID
+	HBalloonIcon     uintptr
 }
 
 type POINT struct {
