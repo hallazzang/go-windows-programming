@@ -72,6 +72,18 @@ func (ni *notifyIcon) ShowNotification(title, text string) error {
 	return nil
 }
 
+func (ni *notifyIcon) ShowNotificationWithIcon(title, text string, hIcon uintptr) error {
+	data := ni.newData()
+	data.UFlags |= win.NIF_INFO
+	copy(data.SzInfoTitle[:], windows.StringToUTF16(title))
+	copy(data.SzInfo[:], windows.StringToUTF16(text))
+	data.DwInfoFlags = win.NIIF_USER | win.NIIF_LARGE_ICON
+	if win.Shell_NotifyIcon(win.NIM_MODIFY, data) == win.FALSE {
+		return errShellNotifyIcon
+	}
+	return nil
+}
+
 func (ni *notifyIcon) newData() *win.NOTIFYICONDATA {
 	var nid win.NOTIFYICONDATA
 	nid.CbSize = uint32(unsafe.Sizeof(nid))
